@@ -1,6 +1,6 @@
-package cryptosystem.phase1;
-
+package cryptosystem.phase2;
 import java.util.Random;
+import cryptosystem.phase1.*;
 
 public class DiffieHellman {
 
