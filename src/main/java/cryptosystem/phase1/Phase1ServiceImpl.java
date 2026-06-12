@@ -71,4 +71,7 @@ public class Phase1ServiceImpl implements Phase1Service {
     public User getUserB() {
         return userB;
     }
+    public CertificateAuthority getCertificateAuthority() {
+        return ca;
+    }
 }
