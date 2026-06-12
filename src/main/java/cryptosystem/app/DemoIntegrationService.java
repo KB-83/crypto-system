@@ -1,36 +1,79 @@
 package cryptosystem.app;
 
-import cryptosystem.phase1.Certificate;
-import cryptosystem.phase1.RsaPublicKey;
+import cryptosystem.phase1.*;
+import cryptosystem.phase2.*;
 
 public class DemoIntegrationService implements IntegrationService {
-    private static final int DEMO_MASTER_KEY = 0xBEEF;
+
+    private final Phase1ServiceImpl phase1 =
+            new Phase1ServiceImpl();
+
+    private final Phase2ServiceImpl phase2 =
+            new Phase2ServiceImpl(phase1);
 
     @Override
     public void initializeSystem(AppState state) {
-        // This temporary implementation lets the UI and Feistel phase run before Phase 1 is merged.
-        state.setCaPublicKey(new RsaPublicKey(3233, 17));
-        state.setUserAPublicKey(new RsaPublicKey(2773, 17));
-        state.setUserBPublicKey(new RsaPublicKey(3599, 17));
-        state.setCertificateA(new Certificate("A", 2773, 17, 142));
-        state.setCertificateB(new Certificate("B", 3599, 17, 219));
-        state.setCertificatesVerified(true);
+
+        state.setCaPublicKey(
+                phase1.getCaPublicKey());
+
+        state.setUserAPublicKey(
+                phase1.getUserAPublicKey());
+
+        state.setUserBPublicKey(
+                phase1.getUserBPublicKey());
+
+        Certificate certA =
+                phase1.issueCertificate(
+                        "A",
+                        phase1.getUserAPublicKey());
+
+        Certificate certB =
+                phase1.issueCertificate(
+                        "B",
+                        phase1.getUserBPublicKey());
+
+        state.setCertificateA(certA);
+        state.setCertificateB(certB);
+
+        boolean okA =
+                phase1.verifyCertificate(
+                        certA,
+                        state.getCaPublicKey());
+
+        boolean okB =
+                phase1.verifyCertificate(
+                        certB,
+                        state.getCaPublicKey());
+
+        state.setCertificatesVerified(okA && okB);
+
         state.setInitialized(true);
+
         state.clearMasterKey();
         state.setLastEncryptedBlocks(new int[0]);
     }
 
     @Override
     public int establishSharedKey(AppState state) {
+
         if (!state.isInitialized()) {
-            throw new IllegalStateException("Initialize the system first using option 1.");
-        }
-        if (!state.areCertificatesVerified()) {
-            throw new IllegalStateException("Certificates are not verified.");
+            throw new IllegalStateException(
+                    "Initialize the system first using option 1.");
         }
 
-        // Replace this value with the real authenticated Diffie-Hellman result from Phase 2.
-        state.setMasterKey(DEMO_MASTER_KEY);
-        return DEMO_MASTER_KEY;
+        if (!state.areCertificatesVerified()) {
+            throw new IllegalStateException(
+                    "Certificates are not verified.");
+        }
+
+        int masterKey =
+                phase2.establishSharedKey(
+                        state.getCertificateA(),
+                        state.getCertificateB());
+
+        state.setMasterKey(masterKey);
+
+        return masterKey;
     }
 }
