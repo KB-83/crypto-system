@@ -23,6 +23,136 @@
 \begin{document}
 
 
+\title{Secure Messaging System Using RSA, Diffie--Hellman, and Feistel Network}
+\author{Kajal Baghestani \\ \and Farbod Allahverdy}
+\date{June 2026}
+
+\maketitle
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% KB %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\fbox{
+\parbox{0.92\textwidth}{
+\textbf{Note to the Teaching Assistants}
+
+This report is intentionally written in a detailed and self-contained manner in order to document all implementation and security aspects of the project.
+
+For a quick evaluation of the project, we recommend reviewing the following sections first:
+
+\begin{itemize}
+    \item \textbf{Section 1: Roadmap of the Project and How to Run It}
+    \item \textbf{Section 2: System Structure and Workflow}
+    \item \textbf{Section 7: Sequence Diagrams of the Protocol}
+    \item \textbf{Section 8: Experimental Results}
+    \item \textbf{Section 10: User Interface and System Integration}
+    \item \textbf{The accompanying file \texttt{exec.txt}} containing a complete execution trace.
+\end{itemize}
+
+The remaining sections provide detailed mathematical foundations, implementation descriptions, and security analyses for completeness and documentation purposes.
+}}
+\end{center}
+
+
+\section{Roadmap of the Project and How to Run It}
+\label{sec:roadmap}
+
+This report is written as a roadmap for the complete secure messaging system. The goal of this first section is to give a clear overview of the whole project before moving into the technical details. The full end-to-end execution of the program is saved in \texttt{exec.txt}, and this file shows the complete console run of the system from initialization to encryption, decryption, and final status display.
+
+To run the full project, the user should execute \texttt{Main.java}. This main entry point starts the console-based application and presents the menu that controls the entire workflow. From there, the system can be used step by step to initialize the cryptographic infrastructure, establish a shared key, encrypt a message, decrypt it, and inspect the current system state.
+
+The overall logic of the project follows a layered structure:
+\begin{center}
+RSA and PKI $\rightarrow$ Authenticated Diffie--Hellman $\rightarrow$ Feistel-Based Symmetric Encryption
+\end{center}
+
+Each phase serves a specific role in the security pipeline. The first phase, RSA and PKI, creates trust by generating keys and certificates and by verifying the identity of the users. The second phase, authenticated Diffie--Hellman, uses those trusted identities to securely establish a shared secret key. The third phase, the Feistel cipher, uses that shared secret as the master key for encrypting and decrypting messages.
+
+In other words, the project works as a complete secure communication path: first it builds trust, then it creates a secret key, and finally it uses that key to protect the message itself. This first section is a high-level explanation of the full system flow, and it combines the work of both team members. The remaining sections of the report provide the detailed implementation, algorithms, and analysis of the individual components contributed to the project.
+
+
+
+\section{System Structure and Workflow}
+\label{sec:structure}
+
+This project implements a complete secure messaging system by combining three cryptographic phases into a single integrated application. The overall design follows a modular workflow in which each phase builds on the result of the previous one. First, RSA key pairs and certificates are created for the Certificate Authority (CA), User A, and User B. Then, an authenticated Diffie--Hellman exchange is performed to establish a shared secret key. Finally, the shared key is used as the basis for a custom Feistel-based symmetric cipher to encrypt and decrypt messages.
+
+\subsection{High-Level Architecture}
+The system is organized into four main parts:
+\begin{itemize}
+    \item \textbf{Phase 1: RSA and PKI} --- responsible for key generation, certificate creation, and certificate verification.
+    \item \textbf{Phase 2: Authenticated Diffie--Hellman} --- responsible for secure key exchange and authentication using digital signatures.
+    \item \textbf{Phase 3: Feistel Cipher} --- responsible for message encryption and decryption using the shared master key.
+    \item \textbf{Application Layer} --- provides the console menu, stores the current state, and connects all components together.
+\end{itemize}
+
+\subsection{Step-by-Step Workflow}
+The execution of the system follows the order below:
+
+\begin{enumerate}
+    \item \textbf{Initialization}
+    \newline
+    The program starts by generating RSA key pairs for the CA, User A, and User B. After that, the CA issues a digital certificate for each user by signing the user's identity and public key information. These certificates are stored in the application state.
+
+    \item \textbf{Certificate Verification}
+    \newline
+    Before any secure exchange begins, each certificate is verified using the CA public key. This ensures that the public keys of User A and User B are trusted and have not been modified.
+
+    \item \textbf{Authenticated Diffie--Hellman Exchange}
+    \newline
+    Once the certificates are valid, User A and User B generate private Diffie--Hellman values and compute their public values. Each public value is signed with the owner's RSA private key, and the signature is verified by the other side. After successful verification, both users compute the same shared secret.
+
+    \item \textbf{Master Key Derivation}
+    \newline
+    The shared Diffie--Hellman secret is reduced to a 16-bit value and used as the master key of the symmetric cipher. Four round keys are then derived from this master key.
+
+    \item \textbf{Message Encryption}
+    \newline
+    When the user selects the encryption option, the plaintext message is converted to ASCII bytes, padded using ISO/IEC 7816-4 padding, split into 16-bit blocks, and encrypted with the Feistel network. The resulting ciphertext blocks are displayed and stored in memory.
+
+    \item \textbf{Message Decryption}
+    \newline
+    When the decryption option is selected, the stored or manually entered ciphertext blocks are decrypted block by block. After removing the padding, the original plaintext message is reconstructed and displayed.
+
+    \item \textbf{Status Display}
+    \newline
+    The status menu shows the current state of the system, including RSA public keys, certificates, verification status, the master key, and the last encrypted message.
+\end{enumerate}
+
+\subsection{Data Flow Between Modules}
+The main data flow of the project can be summarized as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Module} & \textbf{Output Used By} \\
+\hline
+CA and PKI & Certificate verification and authentication \\
+\hline
+Authenticated DH & Shared master key generation \\
+\hline
+Feistel cipher & Message encryption and decryption \\
+\hline
+Application state & Menu operations and data persistence \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Why This Structure Is Important}
+This structure makes the project easier to understand, test, and demonstrate. Each phase is independent enough to be implemented and verified separately, but the final application also shows how the phases work together in one complete secure communication pipeline. As a result, the project not only demonstrates the theory of RSA, PKI, Diffie--Hellman, and block ciphers, but also shows how they can be combined into a practical end-to-end system.
+
+\subsection{Summary of the Full Protocol}
+In summary, the project works in the following order:
+\begin{center}
+CA $\rightarrow$ Certificates $\rightarrow$ Authenticated DH $\rightarrow$ Master Key $\rightarrow$ Feistel Encryption $\rightarrow$ Feistel Decryption
+\end{center}
+
+This end-to-end design satisfies the project requirements and provides a complete simulation of secure communication between two users.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% KB %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algorithms and Cryptography Utilities}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1068,7 +1198,7 @@ and hash functions with 256-bit outputs (such as SHA-256) are now preferred.
 
 \begin{figure}[H]
 \centering
-% \includegraphics[scale=0.7]{figure1.png}
+\includegraphics[scale=0.7]{figure1.png}
 \caption{Diagram of the Certificate Authority (CA) issuing and validating a digital certificate for a user.}
 \end{figure}
 \paragraph{Explanation}
@@ -1086,7 +1216,7 @@ Any party can later verify the authenticity of the certificate using the CA's pu
 
 \begin{figure}[H]
 \centering
-% \includegraphics[scale=0.75]{figure2.png}
+\includegraphics[scale=0.75]{figure2.png}
 \caption{Diagram of the authenticated Diffie-Hellman key exchange using RSA-based digital signatures and certificate validation.}
 \end{figure}
 \paragraph{Explanation}
@@ -1675,14 +1805,6 @@ The execution confirmed that:
 \item The decryption process recovers the original message.
 \item All components operate correctly within a single integrated application.
 \end{itemize}
-
-\subsection{Conclusion}
-
-The final integrated application successfully combines public-key cryptography, certificate management, authenticated key exchange, and symmetric encryption into a single secure messaging system.
-
-The user interface provides a convenient mechanism for executing the entire protocol while maintaining a modular software architecture.
-
-Therefore, the project satisfies all functional requirements described in the assignment specification.
 
 
 \end{document}

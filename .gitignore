@@ -40,6 +40,7 @@ Thumbs.db
 *.fdb_latexmk
 *.bbl
 *.blg
+*.xdv
 
 # VS Code, optional
 .vscode/

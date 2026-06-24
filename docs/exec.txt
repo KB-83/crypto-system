@@ -1,0 +1,70 @@
+==================================================SECURE CRYPTOGRAPHY SYSTEM==================================================1. Initialize system (generate keys & certificates)2. Establish shared key (DH exchange with authentication)3. Encrypt a message (A -> B)4. Decrypt a message (B)5. Show current status6. Exit==================================================Choice: 1System initialized successfully.CA public key: (n=6527, e=257)User A public key: (n=7373, e=257)User B public key: (n=7571, e=257)Certificate A verified: trueCertificate B verified: true==================================================SECURE CRYPTOGRAPHY SYSTEM==================================================1. Initialize system (generate keys & certificates)2. Establish shared key (DH exchange with authentication)3. Encrypt a message (A -> B)4. Dggits s   status[?2004l
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   docs/report.pdf[m
+	[31mmodified:   docs/report.tex[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mdocs/exec.txt[m
+	[31mdocs/figure1.png[m
+	[31mdocs/figure2.png[m
+	[31mdocs/report.xdv[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[1m[7m%[27m[1m[0m                                                                                                                                              [0m[27m[24m[Jkajal@Kajals-MBP crypto-system % [K[?2004hggit addfit      status[?2004l
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   .gitignore[m
+	[31mmodified:   docs/report.pdf[m
+	[31mmodified:   docs/report.tex[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mdocs/exec.txt[m
+	[31mdocs/figure1.png[m
+	[31mdocs/figure2.png[m
+	[31mdocs/report.xdv[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[1m[7m%[27m[1m[0m                                                                                                                                              [0m[27m[24m[Jkajal@Kajals-MBP crypto-system % [K[?2004hggit status[?2004l
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   .gitignore[m
+	[31mmodified:   docs/report.pdf[m
+	[31mmodified:   docs/report.tex[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mdocs/exec.txt[m
+	[31mdocs/figure1.png[m
+	[31mdocs/figure2.png[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[1m[7m%[27m[1m[0m                                                                                                                                              [0m[27m[24m[Jkajal@Kajals-MBP crypto-system % [K[?2004hggog git add --all[?2004l
+[1m[7m%[27m[1m[0m                                                                                                                                              [0m[27m[24m[Jkajal@Kajals-MBP crypto-system % [K[?2004hggit commi     status[?2004l
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	[32mmodified:   .gitignore[m
+	[32mnew file:   docs/exec.txt[m
+	[32mnew file:   docs/figure1.png[m
+	[32mnew file:   docs/figure2.png[m
+	[32mmodified:   docs/report.pdf[m
+	[32mmodified:   docs/report.tex[m
+
+[1m[7m%[27m[1m[0m                                                                                                                                              [0m[27m[24m[Jkajal@Kajals-MBP crypto-system % [K[?2004hggit commit -a -m ''r'e'p'o'r't's' 'a'n'd' '' ' ' ' f'i'n'i'l'i'z'e'd' 'a'n'd' 'a' 'c'o'n'
